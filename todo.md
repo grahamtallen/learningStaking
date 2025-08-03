@@ -3,11 +3,10 @@
 ## Phase 1: Core Contract + APY Logic
 
 - [x] Add `apyBasisPoints` state variable
-- [ ] Track user stake timestamps with `depositTimestamps`
-- [ ] Track staked ETH amounts with `stakedBalances`
-- [ ] Set timestamp and update balance in `stake()` if first stake
-- [ ] Add `calculateReward(address user)` view function
-- [ ] Add `getWithdrawEstimate(address user)` view function
+- [x] Track user stake timestamps with `depositTimestamps`
+- [x] Set timestamp and update balance in `stake()` if first stake
+- [x] Add `calculateReward(address user)` view function
+- [x] Add `getWithdrawEstimate(address user)` view function
 - [ ] Update `withdraw()` to return stake + reward and reset tracking
 
 ## Phase 2: User Dashboard (Frontend)
@@ -27,3 +26,4 @@
 
 - [ ] Track and store list of all stakers
 - [ ] Display all stakers with their stakes and reward estimates in admin UI
+- [ ] Ensure solidity math is safe, pentest
