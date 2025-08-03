@@ -54,5 +54,7 @@ describe("Interest calculation", function () {
         expect(timestamp).to.equal(block?.timestamp);
       });
     });
+
+    describe.skip("withdraw - no time elapsed = no interest added", () => {});
   });
 });

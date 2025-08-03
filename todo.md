@@ -7,7 +7,7 @@
 - [x] Set timestamp and update balance in `stake()` if first stake
 - [x] Add `calculateReward(address user)` view function
 - [x] Add `getWithdrawEstimate(address user)` view function
-- [ ] Update `withdraw()` to return stake + reward and reset tracking
+- [x] Update `withdraw()` to return stake + reward and reset tracking
 
 ## Phase 2: User Dashboard (Frontend)
 

@@ -199,7 +199,7 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "openForWithdraw",
+          name: "goalReached",
           outputs: [
             {
               internalType: "bool",
