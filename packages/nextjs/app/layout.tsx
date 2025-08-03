@@ -4,8 +4,8 @@ import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithPro
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-// import '@coreui/coreui/dist/css/coreui.min.css';
 
+// import '@coreui/coreui/dist/css/coreui.min.css';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],

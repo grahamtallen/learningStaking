@@ -12,7 +12,7 @@
 ## Phase 2: User Dashboard (Frontend)
 
 - [x] Display user’s staked amount
-- [ ] Enter stake amount and execute
+- [x] Enter stake amount and execute
 - [ ] Staked amount should automatically update after successful stake
 - [ ] Display calculated reward
 - [ ] Display total if withdrawn (post goal reached)
