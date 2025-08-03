@@ -6,7 +6,7 @@ import { EtherInput } from "~~/components/scaffold-eth";
 export const StakingInput = ({ onStake }: { onStake: (value: string) => void }) => {
   const [value, setValue] = useState("");
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <EtherInput
         name="stakeAmount"
         placeholder="Enter amount to stake"
@@ -15,7 +15,14 @@ export const StakingInput = ({ onStake }: { onStake: (value: string) => void }) 
         usdMode={false}
         value={value}
       />
-      <button onClick={() => onStake(value)}>Stake</button>
+      <button
+        disabled={value === ""}
+        style={{ marginTop: "1rem" }}
+        className="btn btn-primary"
+        onClick={() => onStake(value)}
+      >
+        Stake
+      </button>
     </div>
   );
 };

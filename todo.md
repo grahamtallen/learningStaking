@@ -13,11 +13,11 @@
 
 - [x] Display user’s staked amount
 - [x] Enter stake amount and execute
-- [ ] Staked amount should automatically update after successful stake
-- [ ] Display calculated reward
-- [ ] Display total if withdrawn (post goal reached)
+- [x] Staked amount should automatically update after successful stake
+- [x] Display calculated reward
+- [x] Display total if withdrawn (post goal reached)
 - [ ] Show fallback estimate if threshold not yet met
-- [ ] Stoplight ui listen for goal reached event
+- [x] Stoplight ui listen for goal reached event
 
 ## Phase 3: Lightweight Admin Interface
 
@@ -31,3 +31,5 @@
 - [ ] Display all stakers with their stakes and reward estimates in admin UI
 - [ ] Ensure solidity math is safe, pentest
 - [ ] goalReached logic safety
+- [ ] Is there a way to avoid the frontend having to call execute?
+- [ ] APY is not calculated accurately with multiple stakes enabled

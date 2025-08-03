@@ -15,7 +15,6 @@ contract Staker {
     bool public goalReached = false; // if goal reached, reward is added
     // uint256 public apyBasisPoints = 1000;
     uint256 public apyBasisPoints = 1000000; // TEST
-    
     mapping(address => uint256) public depositTimestamps;
 
 

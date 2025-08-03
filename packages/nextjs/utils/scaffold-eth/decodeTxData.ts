@@ -63,3 +63,5 @@ export const getFunctionDetails = (transaction: TransactionType) => {
   }
   return "";
 };
+
+export const weiToEth = (wei: bigint) => Number(wei) / 1e18;
