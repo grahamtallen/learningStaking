@@ -27,3 +27,4 @@
 - [ ] Track and store list of all stakers
 - [ ] Display all stakers with their stakes and reward estimates in admin UI
 - [ ] Ensure solidity math is safe, pentest
+- [ ] goalReached logic safety
