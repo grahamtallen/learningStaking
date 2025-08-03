@@ -18,6 +18,8 @@
 - [x] Display total if withdrawn (post goal reached)
 - [ ] Show fallback estimate if threshold not yet met
 - [x] Stoplight ui listen for goal reached event
+- [ ] Move percent calculated to withdrawal card
+- [ ] Show successful trx info after stake
 
 ## Phase 3: Lightweight Admin Interface
 

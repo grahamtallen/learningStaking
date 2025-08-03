@@ -1,10 +1,10 @@
 "use client";
 
-import { StakingAndReturns } from "./_components/StakingAndReturns";
+import { StakingAndWithdrawal } from "./_components/StakingAndWithdrawal";
 import type { NextPage } from "next";
 
 const ReturnsPage: NextPage = () => {
-  return <StakingAndReturns />;
+  return <StakingAndWithdrawal />;
 };
 
 export default ReturnsPage;
