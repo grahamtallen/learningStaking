@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { ethers } from "hardhat";
 
 /**
  * Deploys a contract named "Staker" using the deployer account and
@@ -30,6 +31,7 @@ const deployStaker: DeployFunction = async function (hre: HardhatRuntimeEnvironm
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
+    value: ethers.parseEther("5.0"),
   });
 };
 

@@ -13,9 +13,10 @@ contract Staker {
     uint256 public constant threshold = 1 ether;
     uint256 public deadline = block.timestamp + 45 seconds;
     bool public openForWithdraw = false;
+    uint256 public apyBasisPoints = 500;
 
 
-    constructor(address exampleExternalContractAddress) {
+    constructor(address exampleExternalContractAddress) payable {
         exampleExternalContract = ExampleExternalContract(exampleExternalContractAddress);
     }
 

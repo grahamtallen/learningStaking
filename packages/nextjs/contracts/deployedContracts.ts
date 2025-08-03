@@ -43,7 +43,7 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "constructor",
         },
         {
@@ -64,6 +64,19 @@ const deployedContracts = {
           ],
           name: "Stake",
           type: "event",
+        },
+        {
+          inputs: [],
+          name: "apyBasisPoints",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
         {
           inputs: [
@@ -182,6 +195,10 @@ const deployedContracts = {
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
         },
       ],
       inheritedFunctions: {},
