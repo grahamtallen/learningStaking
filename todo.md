@@ -11,10 +11,13 @@
 
 ## Phase 2: User Dashboard (Frontend)
 
-- [ ] Display user’s staked amount
+- [x] Display user’s staked amount
+- [ ] Enter stake amount and execute
+- [ ] Staked amount should automatically update after successful stake
 - [ ] Display calculated reward
-- [ ] Display total if withdrawn now
+- [ ] Display total if withdrawn (post goal reached)
 - [ ] Show fallback estimate if threshold not yet met
+- [ ] Stoplight ui listen for goal reached event
 
 ## Phase 3: Lightweight Admin Interface
 
