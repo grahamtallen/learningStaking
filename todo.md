@@ -2,7 +2,7 @@
 
 ## Phase 1: Core Contract + APY Logic
 
-- [ ] Add `apyBasisPoints` state variable
+- [x] Add `apyBasisPoints` state variable
 - [ ] Track user stake timestamps with `depositTimestamps`
 - [ ] Track staked ETH amounts with `stakedBalances`
 - [ ] Set timestamp and update balance in `stake()` if first stake
