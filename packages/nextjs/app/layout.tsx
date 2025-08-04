@@ -13,7 +13,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = getMetadata({
-  title: "Challenge #1 | SpeedRunEthereum",
+  title: "Staking Dapp",
   description: "Built with 🏗 Scaffold-ETH 2",
 });
 
@@ -21,7 +21,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning className={`${spaceGrotesk.variable} font-space-grotesk`}>
       <body>
-        <ThemeProvider enableSystem>
+        <ThemeProvider defaultTheme="light">
           <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
         </ThemeProvider>
       </body>

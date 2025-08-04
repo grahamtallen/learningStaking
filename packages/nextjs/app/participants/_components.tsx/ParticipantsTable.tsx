@@ -31,7 +31,7 @@ export const ParticipantsTable = () => {
   }, [participants, newParticipantsData]);
 
   return (
-    <div className="overflow-x-auto" style={{ padding: "2rem" }}>
+    <div className="overflow-x-auto" style={{ padding: "0 1rem" }}>
       <SortableTable data={participantsData} />
     </div>
   );

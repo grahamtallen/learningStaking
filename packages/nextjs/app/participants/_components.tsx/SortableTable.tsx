@@ -29,7 +29,7 @@ export const SortableTable: React.FC<{ data: IParticipantWithData[] }> = ({ data
           return (
             <div className="flex flex-row">
               <BlockieAvatar address={address} size={30} />
-              <span className="ml-2 mr-1">{address.slice(0, 12) + "..."}</span>
+              <span className="ml-2 mr-1">{address}</span>
             </div>
           );
         },
@@ -83,13 +83,9 @@ export const SortableTable: React.FC<{ data: IParticipantWithData[] }> = ({ data
     // maxMultiSortColCount: 3, // only allow 3 columns to be sorted at once - default is Infinity
   });
 
-  //access sorting state from the table instance
-  console.log(table.getState().sorting);
-
   return (
-    <div className="p-2">
-      <div className="h-2" />
-      <table>
+    <div className="p-2 overflow-y-auto">
+      <table style={{ width: "100%" }}>
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
@@ -124,18 +120,15 @@ export const SortableTable: React.FC<{ data: IParticipantWithData[] }> = ({ data
           ))}
         </thead>
         <tbody>
-          {table
-            .getRowModel()
-            .rows.slice(0, 10)
-            .map(row => {
-              return (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map(cell => {
-                    return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
-                  })}
-                </tr>
-              );
-            })}
+          {table.getRowModel().rows.map(row => {
+            return (
+              <tr key={row.id}>
+                {row.getVisibleCells().map(cell => {
+                  return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

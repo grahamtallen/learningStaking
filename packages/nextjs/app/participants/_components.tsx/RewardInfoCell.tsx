@@ -2,7 +2,7 @@
 
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { IParticipantWithData } from "~~/types/abitype/interfaces";
-import { getPercentInterestIncrease, parseGetWithdrawEstimate } from "~~/utils/scaffold-eth";
+import { getPercentInterestIncrease, parseGetWithdrawEstimate, weiToEth } from "~~/utils/scaffold-eth";
 
 export const RewardInfoCell = ({ participant }: { participant: IParticipantWithData }) => {
   const { data: getWithDrawestimate } = useScaffoldReadContract({
@@ -20,5 +20,9 @@ export const RewardInfoCell = ({ participant }: { participant: IParticipantWithD
   const { stake, reward, total } = withdrawEstimate || {};
   const percentInterestIncrease = getPercentInterestIncrease(stake, reward, total);
 
-  return percentInterestIncrease.slice(0, 5) + "%";
+  return (
+    <span>
+      {weiToEth(reward).toFixed(4)} ({percentInterestIncrease.slice(0, 5)})%
+    </span>
+  );
 };
