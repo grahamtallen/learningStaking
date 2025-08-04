@@ -30,9 +30,9 @@ export const StakingCard = ({ stakeInEth }: IStakingCardProps) => {
       <br />
       <StakingInput onStake={onStake} />
       {successfulTrx && (
-        <p>
+        <span>
           ✅ Successfully staked {value} ETH! Transaction hash: <pre style={{ fontSize: "8px" }}>{successfulTrx}</pre>
-        </p>
+        </span>
       )}
       <br />
       Staker contract address: {StakerContract?.address}

@@ -8,6 +8,7 @@
 - [x] Add `calculateReward(address user)` view function
 - [x] Add `getWithdrawEstimate(address user)` view function
 - [x] Update `withdraw()` to return stake + reward and reset tracking
+- [x] Need separate value for tracking if users met threshold, cannot use contract balance with interest rewards
 
 ## Phase 2: User Dashboard (Frontend)
 
@@ -37,7 +38,7 @@
     - [x] show if contract has met threshold
     - [x] show apy rewards
     - [x] show interest percentages in table
-    - [ ] show if users have withdrawn funds yet
+    - [x] show if users have withdrawn funds yet
     - [ ] show date diff
 - [x] Explainer copy
 - [x] Display all stakers with their stakes and reward estimates in admin UI

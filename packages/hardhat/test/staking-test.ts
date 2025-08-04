@@ -28,6 +28,7 @@ describe("🚩 Challenge 1: 🔏 Decentralized Staking App", function () {
       const Staker = await ethers.getContractFactory(contractArtifact);
       stakerContract = (await Staker.deploy(await exampleExternalContract.getAddress())) as Staker;
       console.log("\t", "🛰  Staker contract deployed on", await stakerContract.getAddress());
+      console.log("Staker contract", stakerContract);
     });
     describe("stake()", function () {
       it("Balance should go up when you stake()", async function () {
@@ -57,12 +58,14 @@ describe("🚩 Challenge 1: 🔏 Decentralized Staking App", function () {
         );
       } else {
         it("If enough is staked and time has passed, you should be able to complete", async function () {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const [_, secondAccount] = await ethers.getSigners();
           const timeLeft1 = await stakerContract.timeLeft();
           console.log("\t", "⏱ There should be some time left: ", Number(timeLeft1));
           expect(Number(timeLeft1)).to.greaterThan(0);
 
           console.log("\t", " 🚀 Staking a full eth!");
-          const stakeResult = await stakerContract.stake({ value: ethers.parseEther("1") });
+          const stakeResult = await stakerContract.connect(secondAccount).stake({ value: ethers.parseEther("1") });
           console.log("\t", " 🏷  stakeResult: ", stakeResult.hash);
 
           console.log("\t", " ⌛️ fast forward time...");
@@ -77,7 +80,7 @@ describe("🚩 Challenge 1: 🔏 Decentralized Staking App", function () {
           const execResult = await stakerContract.execute();
           console.log("\t", " 🏷  execResult: ", execResult.hash);
 
-          const result = await exampleExternalContract.completed();
+          const result = await stakerContract.goalReached();
           console.log("\t", " 🥁 complete: ", result);
           expect(result).to.equal(true);
         });

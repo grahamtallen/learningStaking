@@ -19,6 +19,9 @@ export const TotalInfoCell = ({ participant }: { participant: IParticipantWithDa
   const withdrawEstimate = parseGetWithdrawEstimate(getWithDrawestimate);
 
   const { total } = withdrawEstimate || {};
+  if (total === BigInt(0)) {
+    return <div className="text-gray-500">(Funds withdrawn)</div>;
+  }
 
   return formatEther(total);
 };
