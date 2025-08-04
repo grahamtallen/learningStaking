@@ -45,3 +45,9 @@
 - [ ] goalReached logic safety
 - [ ] Is there a way to avoid the frontend having to call execute?
 - [ ] APY is not calculated accurately with multiple stakes enabled
+
+## Bugs & warnings
+
+- [ ] ./app/participants/_components.tsx/ParticipantsTable.tsx
+17:9  Warning: The 'participants' conditional could make the dependencies of useMemo Hook (at line 31) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'participants' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+- [ ] Solidity warnings
