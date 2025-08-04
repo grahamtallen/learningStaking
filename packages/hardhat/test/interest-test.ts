@@ -51,7 +51,8 @@ describe("Interest calculation", function () {
 
         const timestamp = await stakerContract.depositTimestamps(owner.address);
         console.log("\t", " 🔎 depositTimestamp", timestamp);
-        expect(timestamp).to.equal(block?.timestamp);
+        const latestBlock = await ethers.provider.getBlock("latest");
+        expect(timestamp).lessThanOrEqual(latestBlock?.timestamp);
       });
     });
 

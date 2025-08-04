@@ -37,7 +37,7 @@
     - [x] show if contract has met threshold
     - [x] show apy rewards
     - [x] show interest percentages in table
-    - [ ] show if users have withdrawn funds yet
+    - [x] show if users have withdrawn funds yet
     - [ ] show date diff
 - [x] Explainer copy
 - [x] Display all stakers with their stakes and reward estimates in admin UI

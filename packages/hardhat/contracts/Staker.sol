@@ -11,7 +11,7 @@ contract Staker {
     ExampleExternalContract public exampleExternalContract;
     mapping (address => uint256 ) public balances;
     uint256 public constant threshold = 1 ether;
-    uint256 public deadline = block.timestamp + 2 minutes;
+    uint256 public deadline = block.timestamp + 2 seconds;
 
     bool public goalReached = false; // if goal reached, reward is added
     // uint256 public apyBasisPoints = 1000;
