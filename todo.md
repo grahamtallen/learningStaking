@@ -31,7 +31,7 @@
 - [ ] Track and store list of all stakers
     - [x] Refactor to use event history rather than tracking participants in an array
     - [ ] Stretch goal try subgraph - optimized for events
-    - [] Listen for stake events and auto update participants table
+    - [xx] Listen for stake events and auto update participants table
     - [x] For the purposes of the demo only allow one stake per user
     - [x] Read real threshold value from contract on participants page
     - [x] show if contract has met threshold
