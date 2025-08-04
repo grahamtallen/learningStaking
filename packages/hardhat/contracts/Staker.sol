@@ -11,7 +11,7 @@ contract Staker {
     ExampleExternalContract public exampleExternalContract;
     mapping (address => uint256 ) public balances;
     uint256 public constant threshold = 1 ether;
-    uint256 public deadline = block.timestamp + 45 seconds;
+    uint256 public deadline = block.timestamp + 2 minutes;
 
     bool public goalReached = false; // if goal reached, reward is added
     // uint256 public apyBasisPoints = 1000;
@@ -26,11 +26,10 @@ contract Staker {
     // Collect funds in a payable `stake()` function and track individual `balances` with a mapping:
     // (Make sure to add a `Stake(address,uint256)` event and emit it for the frontend `All Stakings` tab to display)
     function stake() public payable {
+        require(msg.value > 0, "Stake amount must be greater than zero");
+        require(balances[msg.sender] == 0, "You can only stake once");
         balances[msg.sender] += msg.value;
-        if (depositTimestamps[msg.sender] == 0) {
-            // todo test multiple staking case
-            depositTimestamps[msg.sender] = block.timestamp;
-        }
+        depositTimestamps[msg.sender] = block.timestamp;
         emit Stake(msg.sender, msg.value, depositTimestamps[msg.sender]);
     }
     // After some `deadline` allow anyone to call an `execute()` function
