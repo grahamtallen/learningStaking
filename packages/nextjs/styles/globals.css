@@ -155,7 +155,10 @@ tfoot th {
 
 td,
 th {
-  padding: 2px 4px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   text-align: left;
 }
 

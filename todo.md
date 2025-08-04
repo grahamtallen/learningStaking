@@ -16,10 +16,9 @@
 - [x] Staked amount should automatically update after successful stake
 - [x] Display calculated reward
 - [x] Display total if withdrawn (post goal reached)
-- [ ] Show fallback estimate if threshold not yet met
 - [x] Stoplight ui listen for goal reached event
-- [ ] Move percent calculated to withdrawal card
-- [ ] Show successful trx info after stake
+- [x] Move percent calculated to withdrawal card
+- [x] Show successful trx info after stake
 
 ## Phase 3: Lightweight Admin Interface
 
@@ -30,14 +29,16 @@
 ## Optional Stretch Goals
 
 - [ ] Track and store list of all stakers
-    - [ ] Refactor to use event history rather than tracking participants in an array
+    - [x] Refactor to use event history rather than tracking participants in an array
     - [ ] Stretch goal try subgraph - optimized for events
-    - [ ] Listen for stake events and auto update participants table
+    - [] Listen for stake events and auto update participants table
     - [x] For the purposes of the demo only allow one stake per user
     - [x] Read real threshold value from contract on participants page
     - [x] show if contract has met threshold
     - [x] show apy rewards
-    - [ ] show interest percentages in table
+    - [x] show interest percentages in table
+    - [ ] show if users have withdrawn funds yet
+    - [ ] show date diff
 - [x] Explainer copy
 - [x] Display all stakers with their stakes and reward estimates in admin UI
 - [ ] Ensure solidity math is safe, pentest

@@ -39,7 +39,7 @@ export const ExplainerCopy = () => {
           </p>
           <p>
             In this contract, participants must meet a threshold of staked ETH by a specific deadline to be eligible for
-            rewards.
+            rewards. Withdrawing before the deadline will not yield any rewards, you will only get your principal back.
           </p>
         </div>
       )}
