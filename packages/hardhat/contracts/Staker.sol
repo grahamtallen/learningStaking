@@ -12,10 +12,11 @@ contract Staker {
     mapping (address => uint256 ) public balances;
     uint256 public constant threshold = 1 ether;
     uint256 public deadline;
+    uint256 public totalStaked = 0; // for tracking total staked amount
 
     bool public goalReached = false; // if goal reached, reward is added, secondAccount
     // uint256 public apyBasisPoints = 1000;
-    uint256 public apyBasisPoints = 1000000; // TEST for demonstration purposes only
+    uint256 public apyBasisPoints = 1000000; // TEST for demonstration purposes onlyreturn map
     mapping(address => uint256) public depositTimestamps;
 
 
@@ -31,12 +32,13 @@ contract Staker {
         require(balances[msg.sender] == 0, "You can only stake once");
         balances[msg.sender] += msg.value;
         depositTimestamps[msg.sender] = block.timestamp;
+        totalStaked += msg.value; // Update total staked amount
         emit Stake(msg.sender, msg.value, depositTimestamps[msg.sender]);
     }
     // After some `deadline` allow anyone to call an `execute()` function
     // If the deadline has passed and the threshold is met, it should call `exampleExternalContract.complete{value: address(this).balance}()`
     function execute() public {
-        bool isOverBalance = address(this).balance > threshold;
+        bool isOverBalance = totalStaked > threshold;
         if(isOverBalance && timeLeft() == 0) {
             goalReached = true;
         }
