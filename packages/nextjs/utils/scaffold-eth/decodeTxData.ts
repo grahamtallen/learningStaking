@@ -104,6 +104,7 @@ export const calculateParticipantData = (
   stakeEvents: any[],
 ): IParticipantWithData[] => {
   const participantData: Record<string, IParticipantWithData> = {};
+  console.log(stakeEvents, 'stakeEvents');
 
   stakeEvents.forEach(event => {
     const { staker, amount, depositTimestamp } = parseStakeEvent(event);
@@ -115,4 +116,10 @@ export const calculateParticipantData = (
   });
 
   return Object.values(participantData);
+}
+
+export const parseTimestamp = (timestamp: bigint | undefined): string => {
+  if (!timestamp) return "N/A";
+  const date = new Date(Number(timestamp) * 1000);
+  return date.toLocaleString();
 }

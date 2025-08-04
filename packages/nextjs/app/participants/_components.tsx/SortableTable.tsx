@@ -11,6 +11,9 @@ import {
     useReactTable,
 } from '@tanstack/react-table'
 import { IParticipantWithData } from '~~/types/abitype/interfaces';
+import { parseTimestamp } from '~~/utils/scaffold-eth';
+import { BlockieAvatar } from '~~/components/scaffold-eth';
+import { RewardInfoCell } from './RewardInfoCell';
 
 // //custom sorting logic for one of our enum columns
 // const sortStatusFn: SortingFn<IParticipantWithData> = (rowA, rowB, _columnId) => {
@@ -21,15 +24,21 @@ import { IParticipantWithData } from '~~/types/abitype/interfaces';
 // }
 
 export const SortableTable: React.FC<{ data: IParticipantWithData[] }> = ({ data }) => {
-    const rerender = React.useReducer(() => ({}), {})[1]
-
     const [sorting, setSorting] = React.useState<SortingState>([])
 
     const columns = React.useMemo<ColumnDef<IParticipantWithData>[]>(
         () => [
             {
                 accessorKey: 'staker',
-                cell: info => info.getValue(),
+                cell: info => {
+                    const address = info.getValue() as string;
+                    return (
+                        <div className="flex flex-row">
+                            <BlockieAvatar address={address} size={30} />
+                            <span className="ml-2 mr-1">{address.slice(0, 6) + "..."}</span>
+                        </div>
+                    )
+                },
                 //this column will sort in ascending order by default since it is a string column
             },
             {
@@ -41,6 +50,14 @@ export const SortableTable: React.FC<{ data: IParticipantWithData[] }> = ({ data
                 accessorKey: 'depositTimestamp',
                 header: () => 'Date',
                 sortingFn: 'datetime',
+                cell: info => parseTimestamp(info.getValue() as bigint),
+            },
+            {
+                accessorKey: 'reward',
+                header: () => 'Reward',
+                cell: info => {
+                    return <RewardInfoCell participant={info.row.original} />;
+                },
             },
         ],
         []

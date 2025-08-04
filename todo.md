@@ -33,6 +33,10 @@
     - [ ] Refactor to use event history rather than tracking participants in an array
     - [ ] Stretch goal try subgraph - optimized for events
     - [ ] Listen for stake events and auto update participants table
+    - [ ] For the purposes of the demo only allow one stake per user
+    - [ ] Read real threshold value from contract on participants page
+    - [ ] show if contract has met threshold
+    - [ ] show interest percentages in table
 - [ ] Explainer copy
 - [ ] Display all stakers with their stakes and reward estimates in admin UI
 - [ ] Ensure solidity math is safe, pentest

@@ -153,6 +153,12 @@ tfoot th {
   font-weight: normal;
 }
 
+td,
+th {
+  padding: 2px 4px;
+  text-align: left;
+}
+
 /* -- EXTENSION OVERRIDES -- */
 
 @plugin "daisyui/theme" {
