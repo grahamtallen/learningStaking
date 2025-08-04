@@ -1,33 +1,39 @@
 "use client";
 
-import { ReturnsWidget } from "./ReturnsWidget";
+import React from "react";
 import { StakingInput } from "./StakingInput";
-import { formatEther } from "viem";
-import { ETHToPrice } from "~~/app/staker-ui/_components";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { IGetWithdrawEstimate } from "~~/types/abitype/interfaces";
-import { getPercentInterestIncrease } from "~~/utils/scaffold-eth";
 
 interface IStakingCardProps {
-  stakeInEth: (amount: string) => void;
-  withdrawalEstimate: IGetWithdrawEstimate;
+  stakeInEth: (amount: string) => Promise<string>;
 }
 
-export const StakingCard = ({ stakeInEth, withdrawalEstimate }: IStakingCardProps) => {
-  const { stake, reward, total } = withdrawalEstimate;
+export const StakingCard = ({ stakeInEth }: IStakingCardProps) => {
   const { data: StakerContract } = useDeployedContractInfo({ contractName: "Staker" });
-  const percentInterestIncrease = getPercentInterestIncrease(stake, reward, total);
+  const [value, setValue] = React.useState<string>("");
+  const [successfulTrx, setSuccessfulTrx] = React.useState<string | null>(null);
+  const onStake = async (value: string) => {
+    try {
+      const result = await stakeInEth(value);
+      setValue(value);
+      setSuccessfulTrx(result);
+    } catch (error) {
+      console.error("Error staking:", error);
+      setSuccessfulTrx(null);
+    }
+  };
   return (
     <div
       className={`flex flex-col items-center space-y-9 bg-base-100 shadow-lg shadow-secondary border-8 border-secondary rounded-xl p-6 w-full max-w-lg mt-24`}
     >
       <h1 className="text-2xl font-bold">Staking</h1>
-      <ReturnsWidget
-        amount={total ? <ETHToPrice className="inline" value={formatEther(total)} /> : ""}
-        percent={percentInterestIncrease}
-      />
       <br />
-      <StakingInput onStake={value => stakeInEth(value)} />
+      <StakingInput onStake={onStake} />
+      {successfulTrx && (
+        <span>
+          ✅ Successfully staked {value} ETH! Transaction hash: <pre style={{ fontSize: "8px" }}>{successfulTrx}</pre>
+        </span>
+      )}
       <br />
       Staker contract address: {StakerContract?.address}
     </div>

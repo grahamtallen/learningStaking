@@ -6,45 +6,39 @@ import "./ExampleExternalContract.sol";
 
 contract Staker {
 
-    event Stake(address,uint256);
+    event Stake(address indexed staker, uint256 amount, uint256 depositTimestamp);
 
     ExampleExternalContract public exampleExternalContract;
     mapping (address => uint256 ) public balances;
     uint256 public constant threshold = 1 ether;
-    uint256 public deadline = block.timestamp + 45 seconds;
+    uint256 public deadline;
+    uint256 public totalStaked = 0; // for tracking total staked amount
 
-    bool public goalReached = false; // if goal reached, reward is added
+    bool public goalReached = false; // if goal reached, reward is added, secondAccount
     // uint256 public apyBasisPoints = 1000;
-    uint256 public apyBasisPoints = 1000000; // TEST
+    uint256 public apyBasisPoints = 1000000; // TEST for demonstration purposes onlyreturn map
     mapping(address => uint256) public depositTimestamps;
 
-    // participants is an array of addresses that have staked
-    // TODO: this would be more efficiently tracaked with a subgraph, only used for frontend visibility
-    address[] public participants;
-    mapping(address => bool) public hasStakedBefore;
 
     constructor(address exampleExternalContractAddress) payable {
         exampleExternalContract = ExampleExternalContract(exampleExternalContractAddress);
+        deadline = block.timestamp + 2 minutes; // short deadline for demo
     }
 
     // Collect funds in a payable `stake()` function and track individual `balances` with a mapping:
     // (Make sure to add a `Stake(address,uint256)` event and emit it for the frontend `All Stakings` tab to display)
     function stake() public payable {
+        require(msg.value > 0, "Stake amount must be greater than zero");
+        require(balances[msg.sender] == 0, "You can only stake once");
         balances[msg.sender] += msg.value;
-        if (!hasStakedBefore[msg.sender]) {
-            hasStakedBefore[msg.sender] = true;
-            participants.push(msg.sender);
-        }
-        if (depositTimestamps[msg.sender] == 0) {
-            // todo test multiple staking case
-            depositTimestamps[msg.sender] = block.timestamp;
-        }
-        emit Stake(msg.sender, msg.value);
+        depositTimestamps[msg.sender] = block.timestamp;
+        totalStaked += msg.value; // Update total staked amount
+        emit Stake(msg.sender, msg.value, depositTimestamps[msg.sender]);
     }
     // After some `deadline` allow anyone to call an `execute()` function
     // If the deadline has passed and the threshold is met, it should call `exampleExternalContract.complete{value: address(this).balance}()`
     function execute() public {
-        bool isOverBalance = address(this).balance > threshold;
+        bool isOverBalance = totalStaked > threshold;
         if(isOverBalance && timeLeft() == 0) {
             goalReached = true;
         }
@@ -61,10 +55,12 @@ contract Staker {
         return block.timestamp;
     }
 
+    // add ReentrancyGuard
     function withdraw() public {
         bool balanceExists = balances[msg.sender] != 0;
         require(balanceExists, "Balance is zero");
         if (balanceExists) {
+            require(block.timestamp >= deadline, "Withdrawal not allowed before deadline");
             bool userBalanceIsGreaterThanContractBalance = balances[msg.sender] > address(this).balance;
             require(!userBalanceIsGreaterThanContractBalance, "Something went wrong, user balance is greater than contract balance");
             uint256 currentBalance = balances[msg.sender]; 
@@ -90,9 +86,9 @@ contract Staker {
         if (principal == 0 || start == 0) {
             return 0;
         }
-        // todo safemath
         uint256 duration = block.timestamp - start;
 
+        // APY is annualized: reward = principal * (duration / 365 days) * (apy / 100%)
         uint256 reward = (principal * duration * apyBasisPoints) / (10000 * 365 days);
 
         return reward;
@@ -104,15 +100,6 @@ contract Staker {
         total = stake + reward;
     }
 
-    function getAllParticipants() public view returns (address[] memory) {
-        return participants;
-    }
-
-    // If the `threshold` was not met, allow everyone to call a `withdraw()` function to withdraw their balance
-
-    // Add a `timeLeft()` view function that returns the time left before the deadline for the frontend
-
-    // Add the `receive()` special function that receives eth and calls stake()
     receive() external payable {
         stake();
     }

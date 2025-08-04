@@ -1,31 +1,38 @@
 "use client";
 
-import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useDeployedContractInfo, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import React from "react";
+import { SortableTable } from "./SortableTable";
+import { useScaffoldEventHistory, useScaffoldWatchContractEvent } from "~~/hooks/scaffold-eth";
+import { IParticipantWithData } from "~~/types/abitype/interfaces";
+import { calculateParticipantData } from "~~/utils/scaffold-eth";
 
+// todo: too much array iterations in this file, figure out pagination of events or subgraph
 export const ParticipantsTable = () => {
-  const { data: StakerContract } = useDeployedContractInfo({ contractName: "Staker" });
-  console.log("StakerContract", StakerContract);
-  debugger;
-
-  const { data: participants } = useScaffoldReadContract({
+  const [newParticipantsData, setNewParticipantsData] = React.useState<IParticipantWithData[]>([]);
+  const { data: stakeEvents } = useScaffoldEventHistory({
     contractName: "Staker",
-    functionName: "getAllParticipants",
-    watch: true,
+    eventName: "Stake",
+    fromBlock: 0n,
   });
+  const participants = stakeEvents ? calculateParticipantData(stakeEvents) : [];
+
+  useScaffoldWatchContractEvent({
+    contractName: "Staker",
+    eventName: "Stake",
+    onLogs: event => {
+      const newParticipants = calculateParticipantData(event);
+      setNewParticipantsData(prev => [...newParticipants, ...prev]);
+    },
+  });
+
+  // listen for any new events and update participants
+  const participantsData = React.useMemo(() => {
+    return [...newParticipantsData, ...participants];
+  }, [participants, newParticipantsData]);
+
   return (
-    <div className="overflow-x-auto">
-      Foobar
-      <ul className="list-none p-0 m-0">
-        {participants?.map((participant, index) => (
-          <li key={index} className="flex justify-between items-center p-2 border-b">
-            <div className="flex flex-row">
-              <BlockieAvatar address={participant} size={30} />
-              <span className="ml-2 mr-1">{participant?.slice(0, 6) + "..."}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+    <div className="overflow-x-auto" style={{ padding: "0 1rem" }}>
+      <SortableTable data={participantsData} />
     </div>
   );
 };

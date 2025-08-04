@@ -153,6 +153,23 @@ tfoot th {
   font-weight: normal;
 }
 
+td,
+th {
+  padding-top: 0.5rem;
+  padding-bottom: 0.1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-align: left;
+}
+
+.moreinfo {
+  cursor: pointer;
+  text-decoration: underline;
+  color: darkblue;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
 /* -- EXTENSION OVERRIDES -- */
 
 @plugin "daisyui/theme" {
