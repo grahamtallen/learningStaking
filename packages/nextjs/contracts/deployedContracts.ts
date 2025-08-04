@@ -43,27 +43,46 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "constructor",
         },
         {
           anonymous: false,
           inputs: [
             {
-              indexed: false,
+              indexed: true,
               internalType: "address",
-              name: "",
+              name: "staker",
               type: "address",
             },
             {
               indexed: false,
               internalType: "uint256",
-              name: "",
+              name: "amount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "depositTimestamp",
               type: "uint256",
             },
           ],
           name: "Stake",
           type: "event",
+        },
+        {
+          inputs: [],
+          name: "apyBasisPoints",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
         {
           inputs: [
@@ -85,8 +104,46 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+          ],
+          name: "calculateReward",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [],
           name: "deadline",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "depositTimestamps",
           outputs: [
             {
               internalType: "uint256",
@@ -118,8 +175,37 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+          ],
+          name: "getWithdrawEstimate",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "stake",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "reward",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "total",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [],
-          name: "openForWithdraw",
+          name: "goalReached",
           outputs: [
             {
               internalType: "bool",
@@ -178,10 +264,27 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "totalStaked",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "withdraw",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
         },
       ],
       inheritedFunctions: {},
