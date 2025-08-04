@@ -12,11 +12,16 @@ contract Staker {
     mapping (address => uint256 ) public balances;
     uint256 public constant threshold = 1 ether;
     uint256 public deadline = block.timestamp + 45 seconds;
+
     bool public goalReached = false; // if goal reached, reward is added
     // uint256 public apyBasisPoints = 1000;
     uint256 public apyBasisPoints = 1000000; // TEST
     mapping(address => uint256) public depositTimestamps;
 
+    // participants is an array of addresses that have staked
+    // TODO: this would be more efficiently tracaked with a subgraph, only used for frontend visibility
+    address[] public participants;
+    mapping(address => bool) public hasStakedBefore;
 
     constructor(address exampleExternalContractAddress) payable {
         exampleExternalContract = ExampleExternalContract(exampleExternalContractAddress);
@@ -26,6 +31,10 @@ contract Staker {
     // (Make sure to add a `Stake(address,uint256)` event and emit it for the frontend `All Stakings` tab to display)
     function stake() public payable {
         balances[msg.sender] += msg.value;
+        if (!hasStakedBefore[msg.sender]) {
+            hasStakedBefore[msg.sender] = true;
+            participants.push(msg.sender);
+        }
         if (depositTimestamps[msg.sender] == 0) {
             // todo test multiple staking case
             depositTimestamps[msg.sender] = block.timestamp;
@@ -93,6 +102,10 @@ contract Staker {
         stake = balances[user];
         reward = calculateReward(user);
         total = stake + reward;
+    }
+
+    function getAllParticipants() public view returns (address[] memory) {
+        return participants;
     }
 
     // If the `threshold` was not met, allow everyone to call a `withdraw()` function to withdraw their balance
