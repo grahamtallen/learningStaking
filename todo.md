@@ -36,9 +36,10 @@
     - [x] For the purposes of the demo only allow one stake per user
     - [x] Read real threshold value from contract on participants page
     - [x] show if contract has met threshold
+    - [x] show apy rewards
     - [ ] show interest percentages in table
-- [ ] Explainer copy
-- [ ] Display all stakers with their stakes and reward estimates in admin UI
+- [x] Explainer copy
+- [x] Display all stakers with their stakes and reward estimates in admin UI
 - [ ] Ensure solidity math is safe, pentest
 - [ ] goalReached logic safety
 - [ ] Is there a way to avoid the frontend having to call execute?
