@@ -11,16 +11,17 @@ contract Staker {
     ExampleExternalContract public exampleExternalContract;
     mapping (address => uint256 ) public balances;
     uint256 public constant threshold = 1 ether;
-    uint256 public deadline = block.timestamp + 2 seconds;
+    uint256 public deadline;
 
-    bool public goalReached = false; // if goal reached, reward is added
+    bool public goalReached = false; // if goal reached, reward is added, secondAccount
     // uint256 public apyBasisPoints = 1000;
-    uint256 public apyBasisPoints = 1000000; // TEST
+    uint256 public apyBasisPoints = 1000000; // TEST for demonstration purposes only
     mapping(address => uint256) public depositTimestamps;
 
 
     constructor(address exampleExternalContractAddress) payable {
         exampleExternalContract = ExampleExternalContract(exampleExternalContractAddress);
+        deadline = block.timestamp + 2 minutes; // short deadline for demo
     }
 
     // Collect funds in a payable `stake()` function and track individual `balances` with a mapping:
@@ -52,10 +53,12 @@ contract Staker {
         return block.timestamp;
     }
 
+    // add ReentrancyGuard
     function withdraw() public {
         bool balanceExists = balances[msg.sender] != 0;
         require(balanceExists, "Balance is zero");
         if (balanceExists) {
+            require(block.timestamp >= deadline, "Withdrawal not allowed before deadline");
             bool userBalanceIsGreaterThanContractBalance = balances[msg.sender] > address(this).balance;
             require(!userBalanceIsGreaterThanContractBalance, "Something went wrong, user balance is greater than contract balance");
             uint256 currentBalance = balances[msg.sender]; 
@@ -81,9 +84,9 @@ contract Staker {
         if (principal == 0 || start == 0) {
             return 0;
         }
-        // todo safemath
         uint256 duration = block.timestamp - start;
 
+        // APY is annualized: reward = principal * (duration / 365 days) * (apy / 100%)
         uint256 reward = (principal * duration * apyBasisPoints) / (10000 * 365 days);
 
         return reward;
