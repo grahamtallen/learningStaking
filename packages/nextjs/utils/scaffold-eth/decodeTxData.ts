@@ -3,7 +3,7 @@ import { GenericContractsDeclaration } from "./contract";
 import { Abi, AbiFunction, decodeFunctionData, getAbiItem } from "viem";
 import { hardhat } from "viem/chains";
 import contractData from "~~/contracts/deployedContracts";
-import { IGetWithdrawEstimate } from "~~/types/abitype/interfaces";
+import { IGetWithdrawEstimate, IStakeEvent, IParticipantWithData } from "~~/types/abitype/interfaces";
 
 type ContractsInterfaces = Record<string, Abi>;
 type TransactionType = TransactionWithFunction | null;
@@ -12,9 +12,9 @@ const deployedContracts = contractData as GenericContractsDeclaration | null;
 const chainMetaData = deployedContracts?.[hardhat.id];
 const interfaces = chainMetaData
   ? Object.entries(chainMetaData).reduce((finalInterfacesObj, [contractName, contract]) => {
-      finalInterfacesObj[contractName] = contract.abi;
-      return finalInterfacesObj;
-    }, {} as ContractsInterfaces)
+    finalInterfacesObj[contractName] = contract.abi;
+    return finalInterfacesObj;
+  }, {} as ContractsInterfaces)
   : {};
 
 export const decodeTransactionData = (tx: TransactionWithFunction) => {
@@ -84,3 +84,35 @@ export const getPercentInterestIncrease = (stake: bigint, reward: bigint, total:
   const ethStake = weiToEth(stake);
   return Number(((ethTotal - ethStake) / ethStake) * 99).toFixed(6);
 };
+
+export const parseStakeEvent = (event: any): IStakeEvent => {
+  if (!event || !event.args) {
+    return { staker: "", depositTimestamp: BigInt(0), amount: BigInt(0) };
+  }
+  const stakeEvent: IStakeEvent = event.args as IStakeEvent;
+  return {
+    staker: stakeEvent.staker,
+    amount: stakeEvent.amount,
+    depositTimestamp: stakeEvent.depositTimestamp,
+  };
+}
+
+// should be done in subgraph or somewhere off-chain
+// iterate through each stake event
+// and calculate the total stake, reward, and total for each participant
+export const calculateParticipantData = (
+  stakeEvents: any[],
+): IParticipantWithData[] => {
+  const participantData: Record<string, IParticipantWithData> = {};
+
+  stakeEvents.forEach(event => {
+    const { staker, amount, depositTimestamp } = parseStakeEvent(event);
+    if (!participantData[staker]) {
+      participantData[staker] = { staker, depositTimestamp, stake: BigInt(0), reward: BigInt(0), total: BigInt(0) };
+    }
+    participantData[staker].stake += amount;
+    participantData[staker].depositTimestamp = depositTimestamp;
+  });
+
+  return Object.values(participantData);
+}

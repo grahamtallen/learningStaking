@@ -7,76 +7,45 @@ import {
     flexRender,
     getCoreRowModel,
     getSortedRowModel,
-    SortingFn,
     SortingState,
     useReactTable,
 } from '@tanstack/react-table'
-import { faker } from '@faker-js/faker'
+import { IParticipantWithData } from '~~/types/abitype/interfaces';
 
-//custom sorting logic for one of our enum columns
-const sortStatusFn: SortingFn<Person> = (rowA, rowB, _columnId) => {
-    const statusA = rowA.original.status
-    const statusB = rowB.original.status
-    const statusOrder = ['single', 'complicated', 'relationship']
-    return statusOrder.indexOf(statusA) - statusOrder.indexOf(statusB)
-}
+// //custom sorting logic for one of our enum columns
+// const sortStatusFn: SortingFn<IParticipantWithData> = (rowA, rowB, _columnId) => {
+//     const statusA = rowA.original.status
+//     const statusB = rowB.original.status
+//     const statusOrder = ['single', 'complicated', 'relationship']
+//     return statusOrder.indexOf(statusA) - statusOrder.indexOf(statusB)
+// }
 
-export const SortableTable = () => {
+export const SortableTable: React.FC<{ data: IParticipantWithData[] }> = ({ data }) => {
     const rerender = React.useReducer(() => ({}), {})[1]
 
     const [sorting, setSorting] = React.useState<SortingState>([])
 
-    const columns = React.useMemo<ColumnDef<Person>[]>(
+    const columns = React.useMemo<ColumnDef<IParticipantWithData>[]>(
         () => [
             {
-                accessorKey: 'firstName',
+                accessorKey: 'staker',
                 cell: info => info.getValue(),
                 //this column will sort in ascending order by default since it is a string column
             },
             {
-                accessorFn: row => row.lastName,
-                id: 'lastName',
+                accessorFn: row => row.stake,
+                id: 'stake',
                 cell: info => info.getValue(),
-                header: () => <span>Last Name</span>,
-                sortUndefined: 'last', //force undefined values to the end
-                sortDescFirst: false, //first sort order will be ascending (nullable values can mess up auto detection of sort order)
             },
             {
-                accessorKey: 'age',
-                header: () => 'Age',
-                //this column will sort in descending order by default since it is a number column
-            },
-            {
-                accessorKey: 'visits',
-                header: () => <span>Visits</span>,
-                sortUndefined: 'last', //force undefined values to the end
-            },
-            {
-                accessorKey: 'status',
-                header: 'Status',
-                sortingFn: sortStatusFn, //use our custom sorting function for this enum column
-            },
-            {
-                accessorKey: 'progress',
-                header: 'Profile Progress',
-                // enableSorting: false, //disable sorting for this column
-            },
-            {
-                accessorKey: 'rank',
-                header: 'Rank',
-                invertSorting: true, //invert the sorting order (golf score-like where smaller is better)
-            },
-            {
-                accessorKey: 'createdAt',
-                header: 'Created At',
-                // sortingFn: 'datetime' //make sure table knows this is a datetime column (usually can detect if no null values)
+                accessorKey: 'depositTimestamp',
+                header: () => 'Date',
+                sortingFn: 'datetime',
             },
         ],
         []
     )
 
-    const [data, setData] = React.useState(() => makeData(1_000))
-    const refreshData = () => setData(() => makeData(100_000)) //stress test with 100k rows
 
     const table = useReactTable({
         columns,
@@ -169,66 +138,7 @@ export const SortableTable = () => {
                         })}
                 </tbody>
             </table>
-            <div>{table.getRowModel().rows.length.toLocaleString()} Rows</div>
-            <div>
-                <button onClick={() => rerender()}>Force Rerender</button>
-            </div>
-            <div>
-                <button onClick={() => refreshData()}>Refresh Data</button>
-            </div>
-            <pre>{JSON.stringify(sorting, null, 2)}</pre>
         </div>
     )
 }
 
-
-export type Person = {
-    firstName: string
-    lastName: string | undefined
-    age: number
-    visits: number | undefined
-    progress: number
-    status: 'relationship' | 'complicated' | 'single'
-    rank: number
-    createdAt: Date
-    subRows?: Person[]
-}
-
-const range = (len: number) => {
-    const arr: number[] = []
-    for (let i = 0; i < len; i++) {
-        arr.push(i)
-    }
-    return arr
-}
-
-const newPerson = (): Person => {
-    return {
-        firstName: faker.person.firstName(),
-        lastName: Math.random() < 0.1 ? undefined : faker.person.lastName(),
-        age: faker.number.int(40),
-        visits: Math.random() < 0.1 ? undefined : faker.number.int(1000),
-        progress: faker.number.int(100),
-        createdAt: faker.date.anytime(),
-        status: faker.helpers.shuffle<Person['status']>([
-            'relationship',
-            'complicated',
-            'single',
-        ])[0]!,
-        rank: faker.number.int(100),
-    }
-}
-
-export function makeData(...lens: number[]) {
-    const makeDataLevel = (depth = 0): Person[] => {
-        const len = lens[depth]!
-        return range(len).map((_d): Person => {
-            return {
-                ...newPerson(),
-                subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
-            }
-        })
-    }
-
-    return makeDataLevel()
-}

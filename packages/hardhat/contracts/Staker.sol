@@ -6,7 +6,7 @@ import "./ExampleExternalContract.sol";
 
 contract Staker {
 
-    event Stake(address,uint256);
+    event Stake(address indexed staker, uint256 amount, uint256 depositTimestamp);
 
     ExampleExternalContract public exampleExternalContract;
     mapping (address => uint256 ) public balances;
@@ -18,10 +18,6 @@ contract Staker {
     uint256 public apyBasisPoints = 1000000; // TEST
     mapping(address => uint256) public depositTimestamps;
 
-    // participants is an array of addresses that have staked
-    // TODO: this would be more efficiently tracaked with a subgraph, only used for frontend visibility
-    address[] public participants;
-    mapping(address => bool) public hasStakedBefore;
 
     constructor(address exampleExternalContractAddress) payable {
         exampleExternalContract = ExampleExternalContract(exampleExternalContractAddress);
@@ -31,15 +27,11 @@ contract Staker {
     // (Make sure to add a `Stake(address,uint256)` event and emit it for the frontend `All Stakings` tab to display)
     function stake() public payable {
         balances[msg.sender] += msg.value;
-        if (!hasStakedBefore[msg.sender]) {
-            hasStakedBefore[msg.sender] = true;
-            participants.push(msg.sender);
-        }
         if (depositTimestamps[msg.sender] == 0) {
             // todo test multiple staking case
             depositTimestamps[msg.sender] = block.timestamp;
         }
-        emit Stake(msg.sender, msg.value);
+        emit Stake(msg.sender, msg.value, depositTimestamps[msg.sender]);
     }
     // After some `deadline` allow anyone to call an `execute()` function
     // If the deadline has passed and the threshold is met, it should call `exampleExternalContract.complete{value: address(this).balance}()`
@@ -104,15 +96,6 @@ contract Staker {
         total = stake + reward;
     }
 
-    function getAllParticipants() public view returns (address[] memory) {
-        return participants;
-    }
-
-    // If the `threshold` was not met, allow everyone to call a `withdraw()` function to withdraw their balance
-
-    // Add a `timeLeft()` view function that returns the time left before the deadline for the frontend
-
-    // Add the `receive()` special function that receives eth and calls stake()
     receive() external payable {
         stake();
     }
