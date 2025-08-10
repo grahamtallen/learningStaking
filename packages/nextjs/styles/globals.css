@@ -76,6 +76,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -120,6 +121,53 @@
 
 .link:hover {
   opacity: 80%;
+}
+
+.readyForWithdrawal {}
+
+.disabledNoWithdrawal {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* table stuff */
+table {
+  border: 1px solid lightgray;
+}
+
+tbody {
+  border-bottom: 1px solid lightgray;
+}
+
+th {
+  border-bottom: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  padding: 2px 4px;
+}
+
+tfoot {
+  color: gray;
+}
+
+tfoot th {
+  font-weight: normal;
+}
+
+td,
+th {
+  padding-top: 0.5rem;
+  padding-bottom: 0.1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-align: left;
+}
+
+.moreinfo {
+  cursor: pointer;
+  text-decoration: underline;
+  color: darkblue;
+  font-size: 0.8rem;
+  opacity: 0.8;
 }
 
 /* -- EXTENSION OVERRIDES -- */
@@ -177,7 +225,8 @@
   --radius-box: 1rem;
 
   --tt-tailw: 6px;
-  --tt-bg: var(--color-primary); /* if you need a tooltip bg override */
+  --tt-bg: var(--color-primary);
+  /* if you need a tooltip bg override */
 }
 
 @theme inline {
